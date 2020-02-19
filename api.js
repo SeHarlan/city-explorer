@@ -1,18 +1,26 @@
 const geoData = require('./geo.json');
+const weatherData = require('./darksky.json');
 
-function getLocation(city) {
+function getLocation(query) {
 
-    const data = geoData.results[0].geometry.location;
+    const data = geoData.results[0];
 
     const locationData = {
-        location: city,
-        lat: data.lat,
-        long: data.lng
+        location: data.formatted_address,
+        lat: data.geometry.location.lat,
+        long: data.geometry.location.lng
     };
 
     return locationData;
 }
 
+function getWeather(lat, long) {
+
+    return weatherData.daily.data;
+
+}
+
 module.exports = {
-    getLocation : getLocation,
+    getLocation: getLocation,
+    getWeather: getWeather
 };
