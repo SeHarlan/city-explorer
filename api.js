@@ -1,22 +1,33 @@
-const geoData = require('./geo.json');
-const weatherData = require('./darksky.json');
+require('dotenv').config();
+// const geoData = require('./geo.json');
+// const weatherData = require('./darksky.json');
 
-function getLocation(query) {
+const request = require('superagent');
 
-    const data = geoData.results[0];
+async function getLocation(query) {
 
+
+    const URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${query}&format=json`;
+
+    const urlData = await request.get(URL);
+    const dataBody = urlData.body[0];
+    
     const locationData = {
-        location: data.formatted_address,
-        lat: data.geometry.location.lat,
-        long: data.geometry.location.lng
+        location: dataBody.display_name,
+        lat: dataBody.lat,
+        long: dataBody.lon
     };
 
     return locationData;
 }
 
-function getWeather(lat, long) {
+async function getWeather(lat, long) {
 
-    return weatherData.daily.data;
+    const URL = `https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${lat},${long}`;
+
+    const weatherData = await request.get(URL);
+
+    return weatherData.body.daily.data;
 
 }
 
