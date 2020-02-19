@@ -1,10 +1,11 @@
 const express = require('express');
+const cors = require('cors')
 const { getLocation, getWeather } = require('./api.js');
 
 const app = express();
 
 
-
+app.use(cors());
 app.get('/weather', (req, res) => {
     
     const data = getWeather();
