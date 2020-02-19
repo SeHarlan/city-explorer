@@ -4,16 +4,18 @@ const { getLocation, getWeather } = require('./api.js');
 
 const app = express();
 
+let lat;
+let long;
 
 app.use(cors());
 app.get('/weather', (req, res) => {
     
-    const data = getWeather();
+    const data = getWeather(lat, long);
 
     const weatherData = data.map(day => {
         return {
             forecast: day.summary,
-            time: new Date(day.time)
+            time: new Date(day.time * 1000)
         };
     });
 
@@ -25,7 +27,8 @@ app.get('/weather', (req, res) => {
 app.get('/location', (req, res) => {
     
     const data = getLocation(req.query);
-    
+    lat = data.lat;
+    long = data.long;
     res.json({
         formatted_query: data.location,
         latitude: data.lat,
