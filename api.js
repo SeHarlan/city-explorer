@@ -50,12 +50,14 @@ async function getEvents(lat, long) {
     return JSON.parse(data.text);
 }
 
-async function getYelp() {
+async function getYelp(lat, long) {
+    console.log('-----------lat', lat);
 
-    const URL = 'api.yelp.com';
-    const data = (await request.get(URL)).set('Authorization', `Bearer ${process.env.YELP_API_KEY}`);
+    const URL = `https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${lat}&longitude=${long}`;
 
-    return data;
+    const data = await request.get(URL).set('Authorization', `Bearer ${process.env.YELP_API_KEY}`);
+
+    return data.body.businesses;
 }
 
 module.exports = {

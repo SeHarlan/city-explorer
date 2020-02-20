@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getLocation, getWeather, getTrails, getEvents } = require('./api.js');
+const { getLocation, getWeather, getTrails, getEvents, getYelp } = require('./api.js');
 
 const app = express();
 
@@ -75,7 +75,6 @@ app.get('/events', async(req, res, next) => {
     try {
         const data = await getEvents(lat, long);
         
-        
         const eventData = data.events.event.map(day => {
             return {
                 link: day.url,
@@ -88,7 +87,26 @@ app.get('/events', async(req, res, next) => {
     } catch (err) {
         next(err);
     }
-})
+});
+
+app.get('/yelp', async(req, res, next) => {
+    try {
+        const data = await getYelp(lat, long);
+        
+        const eventData = data.map(rest => {
+            return {
+                name: rest.name,
+                image_url: rest.image_url,
+                price: rest.price,
+                rating: rest.rating,
+                url: rest.url
+            };
+        });
+        res.json(eventData);
+    } catch (err) {
+        next(err);
+    }
+});
 
 app.get('*', (req, res) => res.json({ OhNo: 404 }));
 

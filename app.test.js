@@ -10,8 +10,8 @@ describe('/GET /location', () => {
          
             expect(response.body).toEqual({
                 formatted_query: expect.any(String), 
-                latitude: expect.any(Number), 
-                longitude: expect.any(Number)
+                latitude: expect.any(String), 
+                longitude: expect.any(String)
             });
             
             expect(response.statusCode).toBe(200);
