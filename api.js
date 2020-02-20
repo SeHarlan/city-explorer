@@ -38,6 +38,18 @@ async function getTrails(lat, long) {
     return data.body.trails;
 }
 
+async function getEvents(lat, long) {
+   
+    const URL = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&where=${lat},${long}&within=25`;
+    
+    const data = await request(URL);
+    console.log('_____long', long);
+    console.log('data_________', data.text);
+
+    
+    return JSON.parse(data.text);
+}
+
 async function getYelp() {
 
     const URL = 'api.yelp.com';
@@ -50,5 +62,6 @@ module.exports = {
     getLocation: getLocation,
     getWeather: getWeather,
     getYelp: getYelp,
-    getTrails: getTrails
+    getTrails: getTrails,
+    getEvents: getEvents
 };
